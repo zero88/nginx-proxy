@@ -1,0 +1,10 @@
+[Unit]
+Description=Watch for NGINX reload signal
+After=nginx.service
+
+[Service]
+ExecStart=/app/proxy/nginx-reload-watcher.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
