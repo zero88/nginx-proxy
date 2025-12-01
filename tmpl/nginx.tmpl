@@ -23,6 +23,7 @@
 {{- $_ := set $config "trust_default_cert" ($globals.Env.TRUST_DEFAULT_CERT | default "true") }}
 {{- $_ := set $config "trust_downstream_proxy" ($globals.Env.TRUST_DOWNSTREAM_PROXY | default "true" | parseBool) }}
 {{- $_ := set $config "enable_access_log" ($globals.Env.DISABLE_ACCESS_LOGS | default "false" | parseBool | not) }}
+{{- $_ := set $config "error_log_loc" ($globals.Env.ERROR_LOG_LOCATION | default "/dev/stderr notice") }}
 {{- $_ := set $config "enable_ipv6" ($globals.Env.ENABLE_IPV6 | default "false" | parseBool) }}
 {{- $_ := set $config "prefer_ipv6_network" ($globals.Env.PREFER_IPV6_NETWORK | default "false" | parseBool) }}
 {{- $_ := set $config "ssl_policy" ($globals.Env.SSL_POLICY | default "Mozilla-Intermediate") }}
@@ -534,6 +535,7 @@ gzip_types text/plain text/css application/javascript application/json applicati
 log_format vhost {{ $logEscape }} '{{ $logFormat }}';
 
 access_log off;
+error_log {{ $globals.config.error_log_loc }};
 
 {{- /* Lower the SSL policy of the http context
     * if at least one vhost use a TLSv1 or TLSv1.1 policy
@@ -550,7 +552,6 @@ access_log off;
 {{- end }}
 
 {{- template "ssl_policy" (dict "ssl_policy" $httpContextSslPolicy) }}
-error_log /dev/stderr;
 
 {{- if $globals.config.resolvers }}
 resolver {{ $globals.config.resolvers }};
