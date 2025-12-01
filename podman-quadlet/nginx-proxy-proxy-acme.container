@@ -1,8 +1,8 @@
 [Container]
 AutoUpdate=registry
 ContainerName=nginx-proxy-acme
-Environment=DEFAULT_EMAIL=dev@playio.cloud DEBUG=1 "ACME_POST_HOOK=notify_nginx_on_host.sh ACME"
-Image=docker.io/nginxproxy/acme-companion:2.5.2
+Environment=DEFAULT_EMAIL=dev@playio.cloud DEBUG=1 RENEW_PRIVATE_KEYS=true "ACME_POST_HOOK=/app/notify_nginx_on_host.sh ACME"
+Image=docker.io/nginxproxy/acme-companion:2.6.2
 LogDriver=json-file
 Pod=nginx-proxy.pod
 PodmanArgs=--log-opt 'max-size=2m' --log-opt 'max-file=10'
@@ -10,7 +10,7 @@ Volume=/app/proxy/acme/:/etc/acme.sh
 Volume=/app/proxy/certs:/etc/nginx/certs
 Volume=/app/proxy/html:/usr/share/nginx/html
 Volume=/app/proxy/reload:/etc/nginx/reload
-Volume=/app/proxy/notify_nginx_on_host.sh:/etc/nginx/notify_nginx_on_host.sh
+Volume=/app/proxy/notify_nginx_on_host.sh:/app/notify_nginx_on_host.sh
 Volume=/run/user/1000/podman/podman.sock:/var/run/docker.sock:ro
 
 [Service]
