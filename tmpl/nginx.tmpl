@@ -534,8 +534,8 @@ gzip_types text/plain text/css application/javascript application/json applicati
 
 log_format vhost {{ $logEscape }} '{{ $logFormat }}';
 
-access_log off;
-error_log {{ $globals.config.error_log_loc }};
+#access_log off;
+#error_log {{ $globals.config.error_log_loc }};
 
 {{- /* Lower the SSL policy of the http context
     * if at least one vhost use a TLSv1 or TLSv1.1 policy

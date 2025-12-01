@@ -1,0 +1,19 @@
+# jail.d/nginx-suspicious.local
+[nginx-suspicious]
+enabled   = true
+logpath   = /var/log/nginx/suspicious_request.log
+# very low threshold – these are already pre-filtered
+maxretry  = 4
+findtime  = 120
+# 24 h first ban
+bantime   = 86400
+action    = iptables-multiport[name=nginx-suspicious, port="http,https", protocol=tcp]
+
+[nginx-suspicious-recidive]
+enabled   = true
+filter    = recidive
+logpath   = /var/log/fail2ban.log
+# 1 week
+findtime  = 604800
+# 4 weeks for repeat offenders
+bantime   = 2419200
