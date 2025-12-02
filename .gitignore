@@ -1,18 +1,21 @@
-acme/**
-!acme/.gitkeep
+nginx-config/acme/**
+!nginx-config/acme/.gitkeep
 
-certs/**
-!certs/.gitkeep
+nginx-config/certs/**
+!nginx-config/certs/.gitkeep
 
-conf.d/**
-!conf.d/.gitkeep
+nginx-config/conf.d/**
+!nginx-config/conf.d/.gitkeep
 
-html/**
-!html/.gitkeep
+nginx-config/html/**
+!nginx-config/html/.gitkeep
 
-htpasswd/**
-!htpasswd/.gitkeep
+nginx-config/htpasswd/**
+!nginx-config/htpasswd/.gitkeep
 
-vhost.d/**
-!vhost.d/.gitkeep
+nginx-config/reload/**
+!nginx-config/reload/.gitkeep
+
+nginx-config/vhost.d/**
+!nginx-config/vhost.d/.gitkeep
 
