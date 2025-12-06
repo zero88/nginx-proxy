@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /app/proxy/reload || exit 1
+cd /etc/nginx/reload || exit 1
 
 # Watch for create events permanently, process output in a loop
 inotifywait -m -e create . | while read -r directory event filename; do

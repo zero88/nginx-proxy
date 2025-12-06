@@ -5,6 +5,7 @@ nginx-config/certs/**
 !nginx-config/certs/.gitkeep
 
 nginx-config/conf.d/**
+!nginx-config/conf.d/00-request-logging.conf
 !nginx-config/conf.d/.gitkeep
 
 nginx-config/html/**
