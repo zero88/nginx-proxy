@@ -1,18 +1,20 @@
 [Container]
 AutoUpdate=registry
 ContainerName=nginx-proxy-gen
-EnvironmentFile=/app/proxy/nginx-config/.env
-#Exec=-notify-sighup nginx-proxy -watch -wait 5s:30s /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
+EnvironmentFile=/app/proxy/nginx-config/nginx-proxy-proxy-gen.env
 Exec=-notify '/app/notify_nginx_on_host.sh GEN' -watch -wait 5s:30s /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
 Image=docker.io/nginxproxy/docker-gen:0.16.1
-#Label=com.github.nginx-proxy.docker-gen=1
 Label=com.github.nginx-proxy.docker-gen=1 com.github.nginx-proxy.nginx=1
 LogDriver=json-file
 Pod=nginx-proxy.pod
 PodmanArgs=--log-opt 'max-size=2m' --log-opt 'max-file=10'
+
 Volume=/app/proxy/nginx-config/conf.d:/etc/nginx/conf.d
-Volume=/app/proxy/nginx-config/certs:/etc/nginx/certs:ro
+Volume=/app/proxy/nginx-config/vhost.d:/etc/nginx/vhost.d
 Volume=/app/proxy/nginx-config/reload:/etc/nginx/reload
+
+Volume=/app/proxy/nginx-config/certs:/etc/nginx/certs:ro
+Volume=/app/proxy/nginx-config/htpasswd:/etc/nginx/htpasswd:ro
 Volume=/app/proxy/nginx-config/tmpl/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro
 Volume=/app/proxy/nginx-config/scripts/notify_nginx_on_host.sh:/app/notify_nginx_on_host.sh:ro
 Volume=/run/user/1000/podman/podman.sock:/tmp/docker.sock:ro
