@@ -1,21 +1,25 @@
 [Container]
-AutoUpdate=registry
-ContainerName=nginx-proxy-acme
-Environment=DEFAULT_EMAIL=dev@playio.cloud DEBUG=1 RENEW_PRIVATE_KEYS=true "ACME_POST_HOOK=/app/notify_nginx_on_host.sh ACME"
-Image=docker.io/nginxproxy/acme-companion:2.6.2
-LogDriver=json-file
 Pod=nginx-proxy.pod
+ContainerName=nginx-proxy-acme
+Image=docker.io/nginxproxy/acme-companion:2.6.2
+Environment=DEBUG=1 RENEW_PRIVATE_KEYS=true "ACME_POST_HOOK=/app/notify_nginx_on_host.sh ACME"
+
+Volume=/app/proxy/nginx-config/acme/:/etc/acme.sh:Z
+Volume=/app/proxy/nginx-config/certs:/etc/nginx/certs:z
+Volume=/app/proxy/nginx-config/html:/usr/share/nginx/html:z
+Volume=/app/proxy/nginx-config/reload:/etc/nginx/reload:z
+Volume=/app/proxy/nginx-config/scripts/notify_nginx_on_host.sh:/app/notify_nginx_on_host.sh:z,ro
+Volume=/run/user/1000/podman/podman.sock:/var/run/docker.sock:z,ro
+
+LogDriver=json-file
 PodmanArgs=--log-opt 'max-size=2m' --log-opt 'max-file=10'
-Volume=/app/proxy/nginx-config/acme/:/etc/acme.sh
-Volume=/app/proxy/nginx-config/certs:/etc/nginx/certs
-Volume=/app/proxy/nginx-config/html:/usr/share/nginx/html
-Volume=/app/proxy/nginx-config/reload:/etc/nginx/reload
-Volume=/app/proxy/nginx-config/scripts/notify_nginx_on_host.sh:/app/notify_nginx_on_host.sh
-Volume=/run/user/1000/podman/podman.sock:/var/run/docker.sock:ro
+
+AutoUpdate=registry
 
 [Service]
 Restart=always
-TimeoutStartSec=900
+TimeoutStartSec=10
+TimeoutStopSec=70
 
 [Install]
 WantedBy=default.target

@@ -1,8 +1,9 @@
-[Pod]
-Network=nginx-proxy.network
-#PublishPort=80:80
-#PublishPort=443:443
-ServiceName=nginx-reverseproxy
-
 [Install]
 WantedBy=default.target
+
+[Pod]
+PodName=nginx-proxy
+Network=nginx-proxy.network
+# ServiceName=nginx-reverseproxy
+# PublishPort=80:80
+# PublishPort=443:443
