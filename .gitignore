@@ -20,3 +20,4 @@ nginx-config/reload/**
 nginx-config/vhost.d/**
 !nginx-config/vhost.d/.gitkeep
 
+.vagrant/

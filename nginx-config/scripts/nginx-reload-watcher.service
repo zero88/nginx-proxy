@@ -3,7 +3,7 @@ Description=Watch for NGINX reload signal
 After=nginx.service
 
 [Service]
-ExecStart=/app/proxy/nginx-reload-watcher.sh
+ExecStart=/app/proxy/nginx-config/scripts/nginx-reload-watcher.sh
 Restart=always
 
 [Install]
