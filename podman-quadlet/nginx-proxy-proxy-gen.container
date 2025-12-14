@@ -2,8 +2,9 @@
 Pod=nginx-proxy.pod
 ContainerName=nginx-proxy-gen
 Image=docker.io/nginxproxy/docker-gen:0.16.1
-Environment=DOCKER_HOST=unix:///run/nginx-proxy/podman.sock
-EnvironmentFile=/app/proxy/nginx-config/nginx-proxy-proxy-gen.env
+
+# https://github.com/nginx-proxy/nginx-proxy/blob/main/docs/README.md#trusting-downstream-proxy-headers
+Environment=NGINX_ON_HOST=true TRUST_DOWNSTREAM_PROXY=false DISABLE_ACCESS_LOGS=true
 Exec=-notify '/app/notify_nginx_on_host.sh GEN' -watch -wait 5s:30s /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
 Label=com.github.nginx-proxy.docker-gen=1 com.github.nginx-proxy.nginx=1
 
@@ -13,11 +14,13 @@ Volume=/app/proxy/nginx-config/htpasswd:/etc/nginx/htpasswd:z,ro
 Volume=/app/proxy/nginx-config/vhost.d:/etc/nginx/vhost.d:z
 Volume=/app/proxy/nginx-config/reload:/etc/nginx/reload:z
 Volume=/app/proxy/nginx-config/tmpl/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:z,ro
-Volume=/app/proxy/nginx-config/scripts/notify_nginx_on_host.sh:/app/notify_nginx_on_host.sh:z,ro
+Volume=/app/proxy/podman-quadlet/notify_nginx_on_host.sh:/app/notify_nginx_on_host.sh:z,ro
 Volume=/run/user/1000/podman/podman.sock:/tmp/docker.sock:z,ro
 
-LogDriver=json-file
-PodmanArgs=--log-opt 'max-size=2m' --log-opt 'max-file=10'
+LogDriver=journald
+# --security-opt 'label=disable' to allow access to the podman.sock from within the container in SELinux environments
+# https://github.com/containers/podman/discussions/9860
+PodmanArgs=--log-opt 'max-size=2m' --log-opt 'max-file=10' --security-opt 'label=disable'
 
 AutoUpdate=registry
 

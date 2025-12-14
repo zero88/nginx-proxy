@@ -2,17 +2,21 @@
 Pod=nginx-proxy.pod
 ContainerName=nginx-proxy-acme
 Image=docker.io/nginxproxy/acme-companion:2.6.2
+
+# https://github.com/nginx-proxy/acme-companion/blob/main/docs/Container-configuration.md
 Environment=DEBUG=1 RENEW_PRIVATE_KEYS=true "ACME_POST_HOOK=/app/notify_nginx_on_host.sh ACME"
 
 Volume=/app/proxy/nginx-config/acme/:/etc/acme.sh:Z
 Volume=/app/proxy/nginx-config/certs:/etc/nginx/certs:z
 Volume=/app/proxy/nginx-config/html:/usr/share/nginx/html:z
 Volume=/app/proxy/nginx-config/reload:/etc/nginx/reload:z
-Volume=/app/proxy/nginx-config/scripts/notify_nginx_on_host.sh:/app/notify_nginx_on_host.sh:z,ro
+Volume=/app/proxy/podman-quadlet/notify_nginx_on_host.sh:/app/notify_nginx_on_host.sh:z,ro
 Volume=/run/user/1000/podman/podman.sock:/var/run/docker.sock:z,ro
 
-LogDriver=json-file
-PodmanArgs=--log-opt 'max-size=2m' --log-opt 'max-file=10'
+LogDriver=journald
+# --security-opt 'label=disable' to allow access to the podman.sock from within the container in SELinux environments
+# https://github.com/containers/podman/discussions/9860
+PodmanArgs=--log-opt 'max-size=2m' --log-opt 'max-file=10' --security-opt 'label=disable'
 
 AutoUpdate=registry
 

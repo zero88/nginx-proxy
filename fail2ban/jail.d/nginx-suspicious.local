@@ -1,4 +1,4 @@
-# jail.d/nginx-suspicious.local
+# /etc/fail2ban/jail.d/nginx-suspicious.local
 [nginx-suspicious]
 enabled   = true
 logpath   = /var/log/nginx/suspicious_request.log
